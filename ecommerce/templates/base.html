@@ -1,0 +1,57 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Nawab built with Django.">
+  <title>{% block title %}Premium Store{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="{% url 'home' %}" aria-label="Nawab home"><span class="brand-mark">♛</span><span>Nawab</span></a>
+    <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+    <nav class="nav" data-nav>
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'products' %}">Products</a>
+      <a href="{% url 'products' %}#categories">Categories</a>
+      <a href="{% url 'cart' %}" class="cart-link">Cart <span class="cart-badge">{{ cart_count }}</span></a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'orders' %}">My Orders</a>
+        <a href="{% url 'profile' %}">Profile</a>
+        <form action="{% url 'logout' %}" method="post" class="inline-form">{% csrf_token %}<button class="nav-button" type="submit">Logout</button></form>
+      {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a class="nav-cta" href="{% url 'register' %}">Register</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+
+<main>
+  {% if messages %}
+    <div class="container messages" aria-live="polite">
+      {% for message in messages %}<div class="message {{ message.tags }}">{{ message }}<button type="button" class="message-close" aria-label="Dismiss">×</button></div>{% endfor %}
+    </div>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div><a class="brand footer-brand" href="{% url 'home' %}"><span class="brand-mark">♛</span><span>Nawab</span></a><p>Quality products, thoughtfully curated for everyday life.</p></div>
+    <div><h3>Shop</h3><a href="{% url 'products' %}">All Products</a><a href="{% url 'cart' %}">Cart</a></div>
+    <div><h3>Account</h3><a href="{% url 'profile' %}">Profile</a><a href="{% url 'orders' %}">Orders</a></div>
+    <div><h3>Project</h3><p>Django · SQLite · Vanilla JS</p><p>Built for learning and portfolio use.</p></div>
+  </div>
+  <div class="container footer-bottom"><span>© {% now "Y" %} Nawab</span><span>All Rights Reserved To Nawab</span></div>
+</footer>
+<script src="{% static 'store/js/app.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,14 @@
+venv/
+.venv/
+.buildvenv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+.env
+.env.*
+staticfiles/
+media/*
+!media/.gitkeep
+.idea/
+.vscode/
+.DS_Store

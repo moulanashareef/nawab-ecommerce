@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Nawab — Elevate Your Lifestyle{% endblock %}
+{% block content %}
+<section class="nawab-hero">
+  <div class="container nawab-hero-inner">
+    <div class="nawab-hero-copy">
+      <span class="nawab-kicker">PREMIUM CURATION · EST. 2026</span>
+      <h1>WELCOME<br><span>TO NAWAB</span></h1>
+      <p>Elevate your lifestyle with thoughtfully selected products, timeless style, and a seamless shopping experience.</p>
+      <div class="hero-actions"><a class="btn btn-gold" href="{% url 'products' %}">Shop Collection <span>→</span></a><a class="nawab-text-link" href="#categories">Explore Categories</a></div>
+      <div class="nawab-trust"><span>✦ Curated products</span><span>✦ Secure checkout</span><span>✦ Fast support</span></div>
+    </div>
+    <div class="nawab-hero-art" aria-label="Nawab premium collection">
+      <div class="hero-glow hero-glow-a"></div><div class="hero-glow hero-glow-b"></div>
+      <div class="hero-art-label"><small>THE NAWAB EDIT</small><strong>Elevate<br>Your Lifestyle</strong><span>Luxury in every detail.</span></div>
+      <div class="hero-crown">♛</div>
+    </div>
+  </div>
+</section>
+
+<section class="nawab-category-strip" id="categories">
+  <div class="container">
+    <div class="nawab-section-title"><div><span class="nawab-kicker">DISCOVER</span><h2>Shop by Category</h2></div><a href="{% url 'products' %}">View all →</a></div>
+    <div class="nawab-category-grid">
+      {% for category in categories %}
+      <a class="nawab-category-card" href="{% url 'products' %}?category={{ category.id }}">
+        <div class="category-art category-art-{{ forloop.counter }}"><span>{{ category.name|slice:":1" }}</span></div>
+        <div class="category-card-copy"><strong>{{ category.name }}</strong><small>{{ category.products.count }} products</small></div><span class="category-arrow">↗</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section nawab-products-section">
+  <div class="container">
+    <div class="nawab-section-title"><div><span class="nawab-kicker">FEATURED PRODUCTS</span><h2>Handpicked for You</h2></div><a href="{% url 'products' %}">View all products →</a></div>
+    <div class="product-grid nawab-product-grid">{% for product in products %}{% include "store/_product_card.html" with product=product %}{% empty %}<div class="empty-state"><h3>No products yet</h3><p>Run <code>python manage.py seed_demo</code> to add demo products.</p></div>{% endfor %}</div>
+  </div>
+</section>
+
+<section class="nawab-why">
+  <div class="container nawab-why-grid"><div><span class="nawab-kicker">THE NAWAB STANDARD</span><h2>Made for people who appreciate the details.</h2></div><div class="nawab-benefits"><article><span>01</span><div><h3>Curated quality</h3><p>Discover a focused selection chosen to feel as good as it looks.</p></div></article><article><span>02</span><div><h3>Effortless shopping</h3><p>Clear information, smooth navigation, and a simple checkout.</p></div></article><article><span>03</span><div><h3>Secure by design</h3><p>Django authentication and protected checkout keep your account safe.</p></div></article></div></div>
+</section>
+
+<section class="nawab-cta"><div class="container nawab-cta-inner"><div><span class="nawab-kicker">YOUR NEXT FAVORITE AWAITS</span><h2>Elevate the everyday.</h2></div><a class="btn btn-gold" href="{% url 'products' %}">Explore Nawab →</a></div></section>
+{% endblock %}

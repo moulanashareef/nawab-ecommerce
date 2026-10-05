@@ -1,0 +1,53 @@
+{% load static %}
+
+<article class="product-card">
+  <a class="product-image" href="{% url 'product_detail' product.pk %}">
+    {% if product.image %}
+      <img src="{{ product.image }}" alt="{{ product.name }}">
+    {% else %}
+      <img src="{% static 'store/images/product-placeholder.svg' %}" alt="">
+    {% endif %}
+
+    <span class="stock-pill">
+      {% if product.stock > 0 %}
+        In stock
+      {% else %}
+        Sold out
+      {% endif %}
+    </span>
+  </a>
+
+  <div class="product-card-body">
+    <span class="product-category">{{ product.category.name }}</span>
+
+    <h3>
+      <a href="{% url 'product_detail' product.pk %}">
+        {{ product.name }}
+      </a>
+    </h3>
+
+    <p>{{ product.description|truncatechars:78 }}</p>
+
+    <div class="product-meta">
+      <strong>₹{{ product.price|floatformat:2 }}</strong>
+      <span>★ {{ product.rating|floatformat:1 }}</span>
+    </div>
+
+    <div class="card-actions">
+      <a class="btn btn-secondary" href="{% url 'product_detail' product.pk %}">
+        View Details
+      </a>
+
+      {% if product.stock %}
+        <form action="{% url 'add_cart' product.pk %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="quantity" value="1">
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <button class="btn btn-primary" type="submit">
+            Add to Cart
+          </button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</article>

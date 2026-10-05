@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ order.order_id }} — Nawab{% endblock %}
+
+{% block content %}
+
+<section class="page-hero compact">
+    <div class="container">
+        <a class="back-link" href="{% url 'orders' %}">← My orders</a>
+
+        <span class="eyebrow">ORDER DETAILS</span>
+
+        <h1>{{ order.order_id }}</h1>
+
+        <p>Placed {{ order.created_at|date:"M d, Y · H:i" }}</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container order-detail-grid">
+
+        <div class="form-card">
+
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">ITEMS</span>
+                    <h2>What's in your order</h2>
+                </div>
+
+                <div>
+                    <strong class="status status-{{ order.status|lower }}">
+                        {{ order.status }}
+                    </strong>
+
+                    {% if order.status == "Pending" %}
+                        <form
+                            method="post"
+                            action="{% url 'cancel_order' order_id=order.order_id %}"
+                            style="margin-top: 12px;"
+                        >
+                            {% csrf_token %}
+
+                            <button type="submit" class="btn btn-danger">
+                                Cancel Order
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% for item in order.items.all %}
+
+                <div class="detail-order-item">
+
+                    <div class="cart-thumb">
+                        {% if item.product.image %}
+                            <img
+                                src="{{ item.product.image }}"
+                                alt="{{ item.product.name }}"
+                            >
+                        {% else %}
+                            <img
+                                src="{% static 'store/images/product-placeholder.svg' %}"
+                                alt=""
+                            >
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <strong>{{ item.product.name }}</strong>
+                        <span>
+                            {{ item.quantity }} × ₹{{ item.price|floatformat:2 }}
+                        </span>
+                    </div>
+
+                    <strong>
+                        ₹{{ item.subtotal|floatformat:2 }}
+                    </strong>
+
+                </div>
+
+            {% endfor %}
+
+            <div class="summary-total">
+                <span>Total</span>
+                <strong>
+                    ₹{{ order.total_amount|floatformat:2 }}
+                </strong>
+            </div>
+
+        </div>
+
+        <aside class="summary-card">
+
+            <span class="eyebrow">CUSTOMER</span>
+
+            <h2>{{ order.full_name }}</h2>
+
+            <p>{{ order.email }}</p>
+
+            <p>{{ order.phone }}</p>
+
+            <p>
+                {{ order.address }}<br>
+                {{ order.city }}, {{ order.state }} — {{ order.postal_code }}
+            </p>
+
+        </aside>
+
+    </div>
+</section>
+
+{% endblock %}
