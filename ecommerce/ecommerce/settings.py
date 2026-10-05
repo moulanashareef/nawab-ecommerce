@@ -3,9 +3,25 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-change-this-for-production")
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-change-this-for-production",
+)
+
 DEBUG = os.environ.get("DJANGO_DEBUG", "1") == "1"
-ALLOWED_HOSTS = [host.strip() for host in os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",") if host.strip()]
+
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get(
+        "DJANGO_ALLOWED_HOSTS",
+        "127.0.0.1,localhost,.vercel.app",
+    ).split(",")
+    if host.strip()
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.vercel.app",
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -56,10 +72,18 @@ DATABASES = {
 }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
+    },
 ]
 
 LANGUAGE_CODE = "en-us"
@@ -68,18 +92,25 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
+STATICFILES_DIRS = (
+    [BASE_DIR / "static"]
+    if (BASE_DIR / "static").exists()
+    else []
+)
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "profile"
 LOGOUT_REDIRECT_URL = "home"
 
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_HTTPONLY = True
+
 X_FRAME_OPTIONS = "DENY"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
